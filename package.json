@@ -1,0 +1,19 @@
+{
+  "name": "wysiwyg-editor",
+  "version": "1.0.0",
+  "description": "basic WYSIWYG editor with @mention functionality",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashwin1014/wysiwyg-editor.git"
+  },
+  "author": "Ashwin Bordoloi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashwin1014/wysiwyg-editor/issues"
+  },
+  "homepage": "https://github.com/ashwin1014/wysiwyg-editor#readme"
+}

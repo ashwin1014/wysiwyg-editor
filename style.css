@@ -1,0 +1,94 @@
+div#tagContainer{
+    box-shadow: 0 0 2px rgba(0,0,0,0.35);
+    display:none;
+    max-height: 250px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    position: absolute;   
+    width: 300px;    
+    z-index: 9999;
+}
+
+div#tagContainer button.list-group-item{
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 0;
+    width: calc(100% + 17px);
+}
+/*  */
+div#tags{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: 17px;
+    box-sizing: content-box;
+    margin-bottom: 0px;
+}
+
+.variableHeader{
+    background-color: #f5f5f5;
+    border:none;   
+    text-align: right !important;
+    cursor: default;
+}
+
+.white-border{
+    border: 1px solid #FFF;
+}
+
+div#commandHolder{
+    border: 1px solid #DDD;
+    width: 800px;
+    height: 50px;
+    background: #F2F2F2;
+    display: flex;
+}
+
+div#commandHolder .btn-default{
+    outline: none;
+    background: #F2F2F2;
+    border-radius: 0;
+    border:none;
+    box-shadow: none !important;
+    width: 48px;
+}
+
+div#commandHolder .btn-default:hover{
+    background: #EBEBEB;
+}
+div#commandHolder .btn-default:active{
+    background-color: #dbdbdb;
+}
+
+
+
+div#emailContent{
+    border: 1px solid #DDD;
+    border-top-width: 0;
+    border-radius: 0;
+    box-shadow: none !important; 
+    width: 800px;
+    height: 300px;
+    outline: none;
+    padding: 10px;
+    overflow-y: auto;   
+}
+
+.editorPlace{
+    position: relative;
+    display: none;
+}
+
+button.list-group-item.selected{
+    background: red !important;
+}
+
+.display-none{
+    display: none;
+}
+
+button.list-group-item:hover{
+    background: #FFF;
+}

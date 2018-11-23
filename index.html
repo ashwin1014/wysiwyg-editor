@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WYSIWYG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+        <h3>WYSIWYG Editor</h3>
+
+    <div id="wysiwygEditor">
+        <div id="commandHolder">
+            <button class="btn btn-default" data-command="bold" id="text-bold" onclick="executeEditorCommand(this)"><i class="fa fa-bold" aria-hidden="true"></i></button>
+            <button class="btn btn-default" data-command="italic" id="text-italic" onclick="executeEditorCommand(this)"><i class="fa fa-italic" aria-hidden="true"></i></button>
+            <button class="btn btn-default" data-command="underline" id="text-underline" onclick="executeEditorCommand(this)"><i class="fa fa-underline" aria-hidden="true"></i></button>
+        </div>
+        <div contenteditable="true" class="form-control" id="emailContent" onkeydown="onContentKeypress(event)" onkeypress="subjectKeypress(event)"></div>
+    </div>
+        <div id="tagContainer">     
+                <div id="tags" class="list-group"></div>
+        </div>
+
+</div>
+        
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
