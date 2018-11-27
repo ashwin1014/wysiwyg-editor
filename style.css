@@ -82,13 +82,18 @@ div#emailContent{
 }
 
 button.list-group-item.selected{
-    background: red !important;
+    background: #f5f5f5 !important;
 }
 
 .display-none{
     display: none;
 }
 
-button.list-group-item:hover{
+/* button.list-group-item:hover{
     background: #FFF;
-}
+} */
+
+
+/* .element-hover {
+    background-color: #f5f5f5 !important;   
+ } */
