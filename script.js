@@ -1,5 +1,5 @@
 $(document).on('keydown',function(e){
-    console.log(this, e.target);       
+    // console.log(this, e.target);       
     if($("#tagContainer").is(":visible")) {
         let key = e.charCode || e.keyCode;
         if(key == 37 || key == 38 || key == 39 || key == 40 ) {
@@ -7,6 +7,8 @@ $(document).on('keydown',function(e){
         } else {}
     }  
 });
+
+
 
 let commonFieldsArray = [
     { Name: "UniqueEventId", Value: "UniqueIdPlaceholder", key:"common-uniqueeventid" },
@@ -46,14 +48,14 @@ let executeEditorCommand = function(ele) {
 };
 
 let debounce = function (func, wait, immediate) {
-    var timeout;
+    let timeout;
     return function() {        
-        var context = this, args = arguments;
-        var later = function() {
-                timeout = null;
+        let context = this, args = arguments;
+        let later = function() {
+                   timeout = null;
                 if (!immediate) func.apply(context, args);
         };
-        var callNow = immediate && !timeout;
+        let callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
@@ -63,7 +65,6 @@ let debounce = function (func, wait, immediate) {
 let onContentKeypress = debounce(function(e){
  //  console.log(words)
  let selectionContext = document.getSelection().anchorNode.textContent;    
- var len = ul.getElementsByClassName('common-variables').length-1;
 
     let tempSearch = "";
     for(let i=document.getSelection().focusOffset; i>=0; i--) {
@@ -94,10 +95,9 @@ let onContentKeypress = debounce(function(e){
     }
 
 
-    else if ($("#tagContainer").is(":visible") && e.keyCode === 38) { //on up arrow   
-       
+    else if ($("#tagContainer").is(":visible") && e.keyCode === 38) { //on up arrow          
 
-        let selected = $(".selected").not( ".display-none" );
+        let selected = $(".selected").not(".display-none").not('.variable-header');
         $("#tagContainer .element").removeClass("selected").not('.display-none');
         if (selected.prev().length == 0) {
             selected.siblings().last().addClass("selected").not('.display-none');
@@ -110,7 +110,7 @@ let onContentKeypress = debounce(function(e){
 
     else if($("#tagContainer").is(":visible") && e.keyCode === 40){ // on down arrow
 
-        let selected = $(".selected").not( ".display-none" );
+        let selected = $(".selected").not( ".display-none" ).not('.variable-header');
         $("#tagContainer .element").removeClass("selected").not('.display-none');
         if (selected.next().length == 0) {
             selected.siblings().first().addClass("selected").not('.display-none');
@@ -151,7 +151,7 @@ let onContentKeypress = debounce(function(e){
     if($("#tagContainer").is(":visible")) {
             setTimeout(function(){
             $("#tagContainer").scrollTop(0);//set to top
-            let val = $('.selected').offset().top+50 - $("#tags").height();
+            let val = $('.selected').offset().top+60 - $("#tags").height();
             $("#tagContainer").scrollTop(val);
      },160);
     }
@@ -168,39 +168,21 @@ let contentKeypress = function (e) {
 
 };
 
-let onContentKeyup = function(e){
-    // e = e || event;                
-    // if (e.keyCode === 38 || e.keyCode === 40 && $("#tagContainer").is(":visible")) {
-    //     e.preventDefault();
-    //     e.stopPropagation();     
-    //     e.cancelbubble = true;
-    // }     
-};
 
 let generateSuggestionsList = function (ampPosition, isContent){
     $("div#tags").empty();
     let li = '';
     li +='<button type="button" class="list-group-item variableHeader element element-hover">Common</button>';
-        commonFieldsArray.map(function(value, index){
+        commonFieldsArray.map(function(value){
             li +='<button type="button" id="'+value.key+'" class="list-group-item white-border common-variables element" onmouseenter="hoverIn(this)" onmouseleave="hoverOut(this)"  onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">'+value.Name+'</button>';
             $("#tags").append(li);
             li='';
             return li;
         });
     };
-
-    let hoverIn = function(ele) {
-        $("#tagContainer .element").removeClass("selected");
-        ele.classList.add('selected');
-    };
-
-    let hoverOut = function(ele) {
-        ele.classList.remove('selected');
-    };
-  
   
     let selectedTag = function(element, ampPosition, isContent){
-        
+                
         let textContent;
         if(element.textContent != undefined){
             textContent = element.textContent;
@@ -208,7 +190,6 @@ let generateSuggestionsList = function (ampPosition, isContent){
             textContent = element.text();
         }
         let valueToInsert = "[" + textContent + "]";
-
     
     window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + valueToInsert + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
 
@@ -218,18 +199,24 @@ let generateSuggestionsList = function (ampPosition, isContent){
     };
 
     let filterItems = function (searchedWord) {
+        generateSuggestionsList(lastIndexOfAmp, true); 
         let listItems = $('button.list-group-item.common-variables');
         let isContainerShowHide = false;
         for (let i = 0; i < listItems.length; i++) {
             let listText = listItems[i].innerHTML;
             if (listText.toLowerCase().match(searchedWord.toLowerCase())) {       
                 listItems[i].classList.remove('display-none');
+                // listItems.not('.display-none')[0].classList.add('selected');
                 isContainerShowHide = true;
             } else {
                 listItems[i].classList.add('display-none');
+                  $('#tags button.display-none').remove();
+              //  listItems.not('.display-none')[0].classList.remove('selected');
             }
+            listItems.not('.display-none')[0].classList.add('selected');
         }
-        if (isContainerShowHide) $("#tagContainer").show();        
+        
+        if (isContainerShowHide) $("#tagContainer").show();    
     };
 
 

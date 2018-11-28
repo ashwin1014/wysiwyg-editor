@@ -81,7 +81,7 @@ div#emailContent{
     display: none;
 }
 
-button.list-group-item.selected{
+#tags button.list-group-item.selected{
     background: #f5f5f5 !important;
 }
 
@@ -89,9 +89,9 @@ button.list-group-item.selected{
     display: none;
 }
 
-/* button.list-group-item:hover{
-    background: #FFF;
-} */
+#tags button.list-group-item:hover{
+    background: rgb(245, 245, 245);
+}
 
 
 /* .element-hover {
