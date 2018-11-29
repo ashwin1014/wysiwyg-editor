@@ -174,7 +174,7 @@ let generateSuggestionsList = function (ampPosition, isContent){
     let li = '';
     li +='<button type="button" class="list-group-item variableHeader element element-hover">Common</button>';
         commonFieldsArray.map(function(value){
-            li +='<button type="button" id="'+value.key+'" class="list-group-item white-border common-variables element" onmouseenter="hoverIn(this)" onmouseleave="hoverOut(this)"  onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">'+value.Name+'</button>';
+            li +='<button type="button" id="'+value.key+'" class="list-group-item white-border common-variables element" onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">'+value.Name+'</button>';
             $("#tags").append(li);
             li='';
             return li;
