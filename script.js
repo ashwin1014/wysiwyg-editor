@@ -1,28 +1,35 @@
 $(document).on('keydown',function(e){
-    // console.log(this, e.target);       
+    // console.log(this, e.target);
     if($("#tagContainer").is(":visible")) {
         let key = e.charCode || e.keyCode;
         if(key == 37 || key == 38 || key == 39 || key == 40 ) {
             e.preventDefault();
         } else {}
-    }  
+    }
 });
 
 
 
 let commonFieldsArray = [
-    { Name: "UniqueEventId", Value: "UniqueIdPlaceholder", key:"common-uniqueeventid" },
-    { Name: "ProjectNameLbl", Value: "ProjectNamePlaceholder", key: "common-projectnamelbl" },
+    { Name: "Unique EventId", Value: "UniqueIdPlaceholder", key:"common-uniqueeventid" },
+    { Name: "Project NameLbl", Value: "ProjectNamePlaceholder", key: "common-projectnamelbl" },
     { Name: "Status", Value: "FormCurrentStatusPlaceholder", key: "common-status"},
-    { Name: "EventTitle", Value: "EventTitleDescription", key: "common-eventtitle" },
-    { Name: "FormNameReview", Value: "FormNamePlaceholder", key: "common-formnamereview" },
+    { Name: "Event Title", Value: "EventTitleDescription", key: "common-eventtitle" },
+    { Name: "Form Name Review", Value: "FormNamePlaceholder", key: "common-formnamereview" },
     { Name: "Category", Value: "CategoriesAssignedToForm", key: "common-category" },
     { Name: "Classification", Value: "ClassificationExecutedInForm", key: "common-classification" },
-    { Name: "DateEvent", Value: "DateEventPlaceholder", key: "common-dateevent" },
-    { Name: "DueDateEvent", Value: "DueDateEventPlaceholder", key: "common-duedateevent" },
+    { Name: "Date Event", Value: "DateEventPlaceholder", key: "common-dateevent" },
+    { Name: "Due Date of Event", Value: "DueDateEventPlaceholder", key: "common-duedateevent" },
     { Name: "Reporter", Value: "ReporterDescriptionPlaceholder", key: "common-reporter" },
-    { Name: "ExpirationDate", Value: "ExpirationDatePlaceholder", key: "common-expirationdate" },
-    { Name: "RenewalDate", Value: "RenewalDatePlaceholder",key: "common-renewaldate" }
+    { Name: "Expiration Date", Value: "ExpirationDatePlaceholder", key: "common-expirationdate" },
+    { Name: "Renewal Date", Value: "RenewalDatePlaceholder",key: "common-renewaldate" }
+  ];
+
+
+  let standardVariableArray = [
+    { Name: "Lorem ipsum",  key:"12" },
+    { Name: "dolor sit amet",  key:"23" },
+    { Name: "consectetur adipiscing elit",  key:"34" },
   ];
 
 let doc = document.getElementById('emailContent');
@@ -49,7 +56,7 @@ let executeEditorCommand = function(ele) {
 
 let debounce = function (func, wait, immediate) {
     let timeout;
-    return function() {        
+    return function() {
         let context = this, args = arguments;
         let later = function() {
                    timeout = null;
@@ -63,20 +70,15 @@ let debounce = function (func, wait, immediate) {
 };
 
 let onContentKeypress = debounce(function(e){
- //  console.log(words)
- let selectionContext = document.getSelection().anchorNode.textContent;    
-
+ let selectionContext = document.getSelection().anchorNode.textContent;
     let tempSearch = "";
     for(let i=document.getSelection().focusOffset; i>=0; i--) {
         if(selectionContext.substr(document.getSelection().anchorOffset-1, 1) == "@") {
             //console.log(i);
-            lastIndexOfAmp = i;           
+            lastIndexOfAmp = i;
             break;
         }
     }
-
-    // let checkString = $('#emailcontent').
-
     let checkLast = selectionContext.substr(document.getSelection().anchorOffset-2, 2);
     console.log(checkLast);
 
@@ -85,17 +87,17 @@ let onContentKeypress = debounce(function(e){
         tempSearch = selectionContext.substring(lastIndexOfAmp+1, document.getSelection().anchorOffset);
         $("#tagContainer").show('fast')
         .css({
-            'top': coords.y + 20, 
+            'top': coords.y + 20,
             'left': coords.x - 10
         });
-       generateSuggestionsList(lastIndexOfAmp, true); 
-        $('.common-variables').not('.display-none').not('.variableHeader')[0].classList.add('selected');  
+       generateSuggestionsList(lastIndexOfAmp, true);
+        $('.common-variables').not('.display-none').not('.variableHeader')[0].classList.add('selected');
     //    $('#emailContent').focusout();
     //    $('#tags').focus();
     }
 
 
-    else if ($("#tagContainer").is(":visible") && e.keyCode === 38) { //on up arrow          
+    else if ($("#tagContainer").is(":visible") && e.keyCode === 38) { //on up arrow
 
         let selected = $(".selected").not(".display-none").not('.variable-header');
         $("#tagContainer .element").removeClass("selected").not('.display-none');
@@ -122,67 +124,86 @@ let onContentKeypress = debounce(function(e){
     }
 
 
-    else if ($("#tagContainer").is(":visible") && e.keyCode === 13 ){ 
-        e.preventDefault();   //on enter key        
+    else if ($("#tagContainer").is(":visible") && e.keyCode === 13 ){
+        e.preventDefault();   //on enter key
         $('.selected').click();
-    //  placeCaretAtEnd(document.getElementById('emailContent'));       
+        placeCaretAtEnd(document.getElementById('emailContent'));
     }
 
 
-    else if (/\s/g.test(selectionContext.substr(document.getSelection().anchorOffset-1, 1)) || selectionContext.substr(document.getSelection().anchorOffset-1, 1) === "") {//if space && @@
+    else if (selectionContext.substr(document.getSelection().anchorOffset-1, 1) === "") {//if space && @@
         tagContainer.style.display = "none";
         doc.click();
         doc.focus();
     }
 
-    else if (e.keyCode === 32 || checkLast === "@@") {//if space && @@
+    else if (checkLast === "@@") {//if space && @@
         tagContainer.style.display = "none";
         doc.click();
         doc.focus();
     }
 
 
-    else if($("#tagContainer").is(":visible")) {
-        tempSearch = selectionContext.substring(lastIndexOfAmp, document.getSelection().anchorOffset);
-        filterItems(tempSearch);      
-    }
+    // else if($("#tagContainer").is(":visible")) {
+    //     tempSearch = selectionContext.substring(lastIndexOfAmp, document.getSelection().anchorOffset);
+    //     filterItems(tempSearch);
+    // }
 
-   
+
     if($("#tagContainer").is(":visible")) {
             setTimeout(function(){
             $("#tagContainer").scrollTop(0);//set to top
-            let val = $('.selected').offset().top+60 - $("#tags").height();
-            $("#tagContainer").scrollTop(val);
+            let val;
+            if($('.selected').length>0) {
+              $('.selected').offset().top+60 - $("#tags").height();
+              $("#tagContainer").scrollTop(val);
+            }
+
      },160);
     }
-    
+
 },150);
+
+let filterWord = function(e) {
+  let selectionContext = document.getSelection().anchorNode.textContent;
+  if($("#tagContainer").is(":visible")) {
+      tempSearch = selectionContext.substring(lastIndexOfAmp, document.getSelection().anchorOffset);
+      filterItems(tempSearch);
+  }
+};
 
 
 let contentKeypress = function (e) {
-    e = e || event;                
+    e = e || event;
     if (e.keyCode === 13 && $("#tagContainer").is(":visible")) {
         e.preventDefault();
-        e.stopPropagation();       
+        e.stopPropagation();
     }
 
 };
 
 
-let generateSuggestionsList = function (ampPosition, isContent){
+let generateSuggestionsList = function (word, ampPosition, isContent){
     $("div#tags").empty();
     let li = '';
-    li +='<button type="button" class="list-group-item variableHeader element element-hover">Common</button>';
+    li +='<button type="button" class="list-group-item variableHeader element element-hover variable-content">Common</button>';
         commonFieldsArray.map(function(value){
-            li +='<button type="button" id="'+value.key+'" class="list-group-item white-border common-variables element" onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">'+value.Name+'</button>';
+            li +='<button type="button" id="'+value.key+'" class="list-group-item white-border common-variables element variable-content" onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">'+value.Name+'</button>';
             $("#tags").append(li);
             li='';
             return li;
         });
-    };
-  
+         li += '<button type="button" class="list-group-item standard-variables variableHeader text-capitalize element variable-content">Standard Variables</button>';
+         standardVariableArray.map(function (sdtVars) {
+          li += '<button type="button" data-key="' + sdtVars.key + '" id="ques-' + sdtVars.key + '" class="list-group-item standard-variables white-border element variable-content" onclick="selectedTag(this,\'' + word + '\',\'' + ampPosition + '\',' + isContent + ',' + false + ')">' + sdtVars.Name + '</button>';
+          $("#tags").append(li);
+          li = '';
+          return li;
+    });
+  };
+
     let selectedTag = function(element, ampPosition, isContent){
-                
+
         let textContent;
         if(element.textContent != undefined){
             textContent = element.textContent;
@@ -190,21 +211,21 @@ let generateSuggestionsList = function (ampPosition, isContent){
             textContent = element.text();
         }
         let valueToInsert = "[" + textContent + "]";
-    
+
     window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + valueToInsert + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
 
-    tagContainer.style.display = "none";    
-    $('#emailContent').blur();
-
+      tagContainer.style.display = "none";
+      // $('#emailContent').blur();
+      placeCaretAtEnd(document.getElementById('emailContent'));
     };
 
     let filterItems = function (searchedWord) {
-        generateSuggestionsList(lastIndexOfAmp, true); 
-        let listItems = $('button.list-group-item.common-variables');
+        generateSuggestionsList(lastIndexOfAmp, null, true);
+        let listItems = $('button.list-group-item.variable-content');
         let isContainerShowHide = false;
         for (let i = 0; i < listItems.length; i++) {
             let listText = listItems[i].innerHTML;
-            if (listText.toLowerCase().match(searchedWord.toLowerCase())) {       
+            if (listText.toLowerCase().match(searchedWord.toLowerCase().trim())) {
                 listItems[i].classList.remove('display-none');
                 // listItems.not('.display-none')[0].classList.add('selected');
                 isContainerShowHide = true;
@@ -213,10 +234,11 @@ let generateSuggestionsList = function (ampPosition, isContent){
                   $('#tags button.display-none').remove();
               //  listItems.not('.display-none')[0].classList.remove('selected');
             }
-            listItems.not('.display-none')[0].classList.add('selected');
+            if(listItems.not('.display-none')[0] && listItems.not('.display-none')[0].classList) listItems.not('.display-none')[0].classList.add('selected');
         }
-        
-        if (isContainerShowHide) $("#tagContainer").show();    
+
+        if (isContainerShowHide) $("#tagContainer").show();
+
     };
 
 
@@ -266,5 +288,19 @@ let getSelectionCoords = function() {
 };
 
 
-
-
+let placeCaretAtEnd = function (el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(false);
+        textRange.select();
+    }
+};
