@@ -69,9 +69,9 @@ let debounce = function(func, wait, immediate) {
   };
 };
 
+let tempSearch = "";
 let onContentKeypress = debounce(function(e) {
   let selectionContext = document.getSelection().anchorNode.textContent;
-  let tempSearch = "";
   for (let i = document.getSelection().focusOffset; i >= 0; i--) {
     if (selectionContext.substr(document.getSelection().anchorOffset - 1, 1) == "@") {
       //console.log(i);
@@ -79,8 +79,10 @@ let onContentKeypress = debounce(function(e) {
       break;
     }
   }
-  let checkLast = selectionContext.substr(document.getSelection().anchorOffset - 2, 2);
-  console.log(checkLast);
+  let checkLast = selectionContext.substr(document.getSelection().anchorOffset - 1, 1);
+  let checkLastTwo = selectionContext.substr(document.getSelection().anchorOffset - 2, 2);
+
+  console.log(checkLastTwo);
 
   if (e.key === '@' && checkLast !== "@@" && checkLast.trim().length <= 1) {
     let coords = getSelectionCoords();
@@ -91,76 +93,23 @@ let onContentKeypress = debounce(function(e) {
         'left': coords.x - 10
       });
     generateSuggestionsList(lastIndexOfAmp, true);
-    $('.common-variables').not('.display-none').not('.variableHeader')[0].classList.add('selected');
-    //    $('#emailContent').focusout();
-    //    $('#tags').focus();
+//    setTimeout(function () {
+        $('.common-variables').not('.display-none').not('.variableHeader')[0].classList.add('selected');
+//    }, 155);
   }
 
-
-  // else if ($("#tagContainer").is(":visible") && e.keyCode === 38) { //on up arrow
-  //
-  //     let selected = $(".selected").not(".display-none").not('.variable-header');
-  //     $("#tagContainer .element").removeClass("selected").not('.display-none');
-  //     if (selected.prev().length == 0) {
-  //         selected.siblings().last().addClass("selected").not('.display-none');
-  //     } else {
-  //         selected.prev().addClass("selected").not('.display-none');
-  //     }
-  //     e.preventDefault();
-  //  //   $('.element:not(:first-child).element-hover').removeClass('element-hover').prev().addClass('element-hover');
-  // }
-  //
-  // else if($("#tagContainer").is(":visible") && e.keyCode === 40){ // on down arrow
-  //
-  //     let selected = $(".selected").not( ".display-none" ).not('.variable-header');
-  //     $("#tagContainer .element").removeClass("selected").not('.display-none');
-  //     if (selected.next().length == 0) {
-  //         selected.siblings().first().addClass("selected").not('.display-none');
-  //     } else {
-  //         selected.next().addClass("selected").not('.display-none');
-  //     }
-  //     e.preventDefault();
-  //   //  $('.element:not(:last-child).element-hover').removeClass('element-hover').next().addClass('element-hover');
-  // }
-
-
-  // else if ($("#tagContainer").is(":visible") && e.keyCode === 13) {
-  //   e.preventDefault();   //on enter key
-  //   $('.selected').click();
-  //   placeCaretAtEnd(document.getElementById('emailContent'));
-  // }
-
-
-  else if (selectionContext.substr(document.getSelection().anchorOffset - 1, 1) === "") {//if space && @@
+   else if ((/\s+/g.test(checkLast) && tempSearch == "") || checkLast === " " || checkLast === "") {//if space && @@
+//  else if (spaceCheck === " " || spaceCheck === "") {//if space && @@
     tagContainer.style.display = "none";
     doc.click();
     doc.focus();
   }
 
-  else if (checkLast === "@@") {//if space && @@
+  else if (checkLastTwo === "@@") {// @@
     tagContainer.style.display = "none";
     doc.click();
     doc.focus();
   }
-
-
-  // else if($("#tagContainer").is(":visible")) {
-  //     tempSearch = selectionContext.substring(lastIndexOfAmp, document.getSelection().anchorOffset);
-  //     filterItems(tempSearch);
-  // }
-
-
-  // if($("#tagContainer").is(":visible")) {
-  //         setTimeout(function(){
-  //         $("#tagContainer").scrollTop(0);//set to top
-  //         let val;
-  //         if($('.selected').length>0) {
-  //           $('.selected').offset().top+60 - $("#tags").height();
-  //           $("#tagContainer").scrollTop(val);
-  //         }
-  //  },160);
-  // }
-
 }, 150);
 
 let filterWord = debounce(function(e) {
@@ -193,12 +142,6 @@ let filterWord = debounce(function(e) {
     filterItems(tempSearch);
   }
 
-  // else if ($("#tagContainer").is(":visible") && e.keyCode === 13) {
-  //   e.preventDefault();   //on enter key
-  //   $('.selected').click();
-  //   placeCaretAtEnd(document.getElementById('emailContent'));
-  // }
-
   if ($("#tagContainer").is(":visible")) {// scroll on arrow keys
     $("#tagContainer").scrollTop(0);//set to top
     let val;
@@ -212,10 +155,6 @@ let filterWord = debounce(function(e) {
 
 let contentKeypress = function(e) {
   e = e || event;
-  // if (e.keyCode === 13 && $("#tagContainer").is(":visible")) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  // }
    if ($("#tagContainer").is(":visible") && e.keyCode === 13) {
     e.preventDefault();   //on enter key
     $('.selected').click();
@@ -256,7 +195,7 @@ let selectedTag = function(element, ampPosition, isContent) {
   window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + valueToInsert + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
 
   tagContainer.style.display = "none";
-  // $('#emailContent').blur();
+  tempSearch = "";
   placeCaretAtEnd(document.getElementById('emailContent'));
 };
 
@@ -268,18 +207,14 @@ let filterItems = function(searchedWord) {
     let listText = listItems[i].innerHTML;
     if (listText.toLowerCase().match(searchedWord.toLowerCase().trim())) {
       listItems[i].classList.remove('display-none');
-      // listItems.not('.display-none')[0].classList.add('selected');
       isContainerShowHide = true;
     } else {
       listItems[i].classList.add('display-none');
       $('#tags button.display-none').remove();
-      //  listItems.not('.display-none')[0].classList.remove('selected');
     }
     if (listItems.not('.display-none')[0] && listItems.not('.display-none')[0].classList) listItems.not('.display-none')[0].classList.add('selected');
   }
-
   if (isContainerShowHide) $("#tagContainer").show();
-
 };
 
 
