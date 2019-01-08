@@ -30,6 +30,12 @@ let standardVariableArray = [
   { Name: "JavaScript", key: "45" },
   { Name: "Python Django", key: "56" },
   { Name: "Python Flask", key: "67" },
+  { Name: "MEAN Stack", key: "78" },
+  { Name: "MERN Stack", key: "89" },
+  { Name: "Underscore Js", key: "90" },
+  { Name: "Ember Js", key: "98" },
+  { Name: "Angular Js", key: "87" },
+  { Name: "React Js", key: "76" },
 ];
 
 let doc = document.getElementById('emailContent');
@@ -93,13 +99,10 @@ let onContentKeypress = debounce(function(e) {
         'left': coords.x - 10
       });
     generateSuggestionsList(lastIndexOfAmp, true);
-//    setTimeout(function () {
         $('.common-variables').not('.display-none').not('.variableHeader')[0].classList.add('selected');
-//    }, 155);
   }
 
-   else if ((/\s+/g.test(checkLast) && tempSearch == "") || checkLast === " " || checkLast === "") {//if space && @@
-//  else if (spaceCheck === " " || spaceCheck === "") {//if space && @@
+   else if ((/\s+/g.test(checkLast) && tempSearch === "") || checkLast === "") {//if space && @@
     tagContainer.style.display = "none";
     doc.click();
     doc.focus();
@@ -146,7 +149,7 @@ let filterWord = debounce(function(e) {
     $("#tagContainer").scrollTop(0);//set to top
     let val;
     if ($('.selected').length > 0) {
-      val = $('.selected').offset().top + 270 - $("#tags").height();
+      val = $('.selected').offset().top + 450 - $("#tags").height();
       $("#tagContainer").scrollTop(val);
     }
   }
