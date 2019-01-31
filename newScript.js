@@ -119,7 +119,7 @@ let onContentKeypress = function(e) {
    if ($("#tagContainer").is(":visible") && e.keyCode === 13) {
     e.preventDefault();   //on enter key
     $('.selected').click();
-  placeCaretAtEnd(doc);
+    placeCaretAtEnd(document.getElementById('emailContent'));
   }
 };
 
@@ -167,14 +167,14 @@ let onContentKeyup = debounce(function(e) {
 let generateSuggestionsList = function(ampPosition, isContent) {
   $("div#tags").empty();
   let li = '';
-  li += '<button type="button" class="list-group-item variableHeader element element-hover">Common</button>';
+  li += '<button type="button" class="list-group-item variableHeader element element-hover variable-content">Common</button>';
   commonFieldsArray.map(function(value) {
     li += '<button type="button" data-key="' + value.key + '" id="' + value.key + '" class="list-group-item white-border common-variables element variable-content" onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">' + value.Name + '</button>';
     $("#tags").append(li);
     li = '';
     return li;
   });
-  li += '<button type="button" class="list-group-item standard-variables variableHeader text-capitalize element">Standard Variables</button>';
+  li += '<button type="button" class="list-group-item standard-variables variableHeader text-capitalize element variable-content">Standard Variables</button>';
   standardVariableArray.map(function(sdtVars) {
     li += '<button type="button" data-key="' + sdtVars.key + '" id="ques-' + sdtVars.key + '" class="list-group-item standard-variables white-border element variable-content" onclick="selectedTag(this,\'' + ampPosition + '\',\'' + isContent + '\')">' + sdtVars.Name + '</button>';
     $("#tags").append(li);
@@ -186,18 +186,37 @@ let generateSuggestionsList = function(ampPosition, isContent) {
 let selectedTag = function(element, ampPosition, isContent) {
 
   let textContent;
+  let variableId = element.getAttribute('data-key');
   if (element.textContent != undefined) {
     textContent = element.textContent;
   } else {
     textContent = element.text();
   }
   let valueToInsert = "[" + textContent + "]";
+  variableId = variableId != null ? "<span class='variable-link' data-inspectquestionid=" + variableId + " data-emailinspectquestionid=" + variableId + ">" + valueToInsert + "</span><br/>" : valueToInsert;
 
- window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + valueToInsert + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
+//  window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + valueToInsert + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
+    window.getSelection().anchorNode.textContent = window.getSelection().anchorNode.textContent.substr(0, (ampPosition - 0) - 1) + variableId + window.getSelection().anchorNode.textContent.substr(window.getSelection().focusOffset, window.getSelection().anchorNode.textContent.length);
+
+    if (variableId != null) {
+            let parent = document.getElementById('emailContent').innerHTML;
+            let parentHtml = parent.replace(/&lt;/g, "<");
+            parentHtml = parentHtml.replace(/&gt;/g, ">");
+            let isSpan = $(window.getSelection().anchorNode.parentNode).length > 0 && $(window.getSelection().anchorNode.parentNode).is('span');
+            $('#emailContent').html(parentHtml);
+            if (isSpan) {
+                $("#wysiwygEditor").find("[data-emailinspectquestionid]").insertAfter($("#wysiwygEditor").find("[data-emailinspectquestionid]").parent());
+                $("#wysiwygEditor").find("[data-emailinspectquestionid]").removeAttr("data-emailinspectquestionid");
+            }
+            else {
+                $("#wysiwygEditor").find("[data-emailinspectquestionid]").removeAttr("data-emailinspectquestionid");
+            }
+    }
+
 
   tagContainer.style.display = "none";
   tempSearch = "";
-  placeCaretAtEnd(doc);
+  placeCaretAtEnd(document.getElementById('emailContent'));
 };
 
 let filterItems = function(searchedWord) {
@@ -212,14 +231,13 @@ let filterItems = function(searchedWord) {
     } else {
       listItems[i].classList.add('display-none');
       $('#tags button.display-none').remove();
-      $('#tags .variableHeader').remove();
     }
     if (listItems.not('.display-none')[0] && listItems.not('.display-none')[0].classList) listItems.not('.display-none')[0].classList.add('selected');
   }
   if (isContainerShowHide) $("#tagContainer").show();
 };
 
-// https://stackoverflow.com/questions/6846230/coordinates-of-selected-text-in-browser-page
+
 // get x & y position in pixels
 let getSelectionCoords = function() {
   var sel = document.selection, range, rect;
@@ -265,7 +283,7 @@ let getSelectionCoords = function() {
   return { x: x, y: y };
 };
 
-// https://stackoverflow.com/questions/4233265/contenteditable-set-caret-at-the-end-of-the-text-cross-browser
+
 let placeCaretAtEnd = function(el) {
   el.focus();
   if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {

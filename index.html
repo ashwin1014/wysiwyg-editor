@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>WYSIWYG</title>
-    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="style.css">
@@ -24,7 +24,7 @@
             <button class="btn btn-default" data-command="undo" id="text-undo" onclick="executeEditorCommand(this)"><i class="fa fa-undo" aria-hidden="true"></i></button>
             <button class="btn btn-default" data-command="redo" id="text-redo" onclick="executeEditorCommand(this)"><i class="fa fa-repeat" aria-hidden="true"></i></button>
         </div>
-        <div contenteditable="true" class="form-control" id="emailContent" onkeydown="onContentKeypress(event)" onkeypress="contentKeypress(event)" onkeyup="filterWord(event)"></div>
+        <div contenteditable="true" class="form-control" id="emailContent" onkeydown="onContentKeydown(event)" onkeypress="onContentKeypress(event)" onkeyup="onContentKeyup(event)"></div>
     </div>
     <div id="tagContainer">
         <div id="tags" class="list-group"></div>

@@ -4,9 +4,9 @@ div#tagContainer{
     max-height: 250px;
     height: auto;
     overflow-y: auto;
-    overflow-x: hidden; 
-    position: absolute;   
-    width: 300px;    
+    overflow-x: hidden;
+    position: absolute;
+    width: 300px;
     z-index: 9999;
 }
 
@@ -29,7 +29,7 @@ div#tags{
 
 .variableHeader{
     background-color: #f5f5f5;
-    border:none;   
+    border:none;
     text-align: right !important;
     cursor: default;
 }
@@ -68,12 +68,12 @@ div#emailContent{
     border: 1px solid #DDD;
     border-top-width: 0;
     border-radius: 0;
-    box-shadow: none !important; 
+    box-shadow: none !important;
     width: 800px;
     height: 300px;
     outline: none;
     padding: 10px;
-    overflow-y: auto;   
+    overflow-y: auto;
 }
 
 .editorPlace{
@@ -93,7 +93,11 @@ div#emailContent{
     background: rgb(245, 245, 245);
 }
 
+.variable-link{
+  color: #06C;
+}
+
 
 /* .element-hover {
-    background-color: #f5f5f5 !important;   
+    background-color: #f5f5f5 !important;
  } */
